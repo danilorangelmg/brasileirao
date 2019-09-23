@@ -1,6 +1,6 @@
 // var db_string = 'localhost:27017/data/db/TCC';
 
-var db_string = '52.37.183.144:27017/data/db/TCC';
+var db_string = 'localhost:27017/data/db/TCC';
 
 var mongoose = require('mongoose').connect(db_string);
 console.log("connected mongodb on localhost:27017")

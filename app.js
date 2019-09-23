@@ -2,15 +2,15 @@ var app = require('./app_config.js');
 
 //controller
 require('./controller/modelMongoController.js');
-var movies = require('./controller/movieController.js');
-var checkout = require('./controller/checkoutController.js');
-var user = require('./controller/userController.js');
-var offer = require('./controller/offerController.js');
 var cron = require('./controller/cronController.js');
+var base = require('./controller/baseController.js');
 var cheerio = require('cheerio')
 var request = require("request");
+var constUtil = require('./const.js');
 
 var validator = require('validator');
+var ScoreModel = base.getDbModel(constUtil.ScoreModel());
+
 
 cron.createCrons();
 
@@ -19,56 +19,39 @@ app.get('/', function (req, res) {
     res.contentType('application/json');
     var resp = 'Servidor online\n\n' +
         'Serviços disponivel\n' +
-        '/lastedMovies\n' +
-        '/lastedMovies/banners\n' +
-        '/genres\n' +
-        '/genres/{{id}}\n' +
-        '/movies/{{name}}\n' +
-        '/login\n' +
-        '/logout\n' +
-        '/userOffer\n' +
-        '/newUser\n' +
-        '/userDetail';
+        '/score\n' +
+        '/games\n' +
 
     res.end(resp);
 });
 
-app.get("/craw", function (req, res) {
+app.get("/score", function (req, res) {
 
     request('https://globoesporte.globo.com/futebol/brasileirao-serie-a/', function (err, resReq, html) {
         const a = cheerio.load(html)
         const $ = cheerio.load(a.html())
-        $('.menu-submenu-column-1 ul').find('.menu-level li').find('.menu-item-link').each((i, el) => {
-            if (i == 0) {
-                item = $(el).text()
-                res.json(({"status": "error", "message": item}));
-            }
-        })
+        var result = $('body').find('main').find('script').html().toString()
+        const match = result.match(/const classificacao = (.*);/);
+        var json = JSON.parse(match[1])
+        delete json.edicao
+        delete json.fase
+        delete json.fases_navegacao
+        delete json.lista_jogos
+        delete json.lista_jogos_unica
+        delete json.lista_tipo_unica
+        delete json.rodada
+        delete json.faixas_classificacao
+        res.json(json)
+
     })
 })
 
-// function test(html, res) {
-//     const a = cheerio.load(html)
-//     const $ = cheerio.load(a.html())
-//
-//     $('.menu-submenu-column-1 ul').find('.menu-level li').find('.menu-item-link').each((i, el) => {
-//         console.log("i "+i+" ")
-//         if (i == 0) {
-//         item = $(el).text()
-//     }
-// }
+app.get("/games", function(req, res){
+    if (!ScoreModel) {
+        ScoreModel = base.getDbModel('ScoreModel');
+    }
+    base.find(constUtil.ScoreModel(), {}, function (values) {
+        res.json(JSON.parse(values[0].result));
+    });
 
-// var item = ""
-// var finish = false
-// request('https://globoesporte.globo.com/futebol/brasileirao-serie-a/', function (err, resReq, body) {
-//     const a = cheerio.load(html)
-//     const $ = cheerio.load(a.html())
-//
-//     $('.menu-submenu-column-1 ul').find('.menu-level li').find('.menu-item-link').each((i, el) => {
-//         console.log("i "+i+" ")
-//         if (i == 0) {
-//         item = $(el).text()
-//         res.json(({"status": "error", "message": item}));
-//     }
-//
-// })
+})
