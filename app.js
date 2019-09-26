@@ -10,7 +10,7 @@ var constUtil = require('./const.js');
 
 var validator = require('validator');
 var ScoreModel = base.getDbModel(constUtil.ScoreModel());
-
+var DescriptionModel = base.getDbModel(constUtil.DescriptionModel());
 
 cron.createCrons();
 
@@ -54,4 +54,24 @@ app.get("/games", function(req, res){
         res.json(JSON.parse(values[0].result));
     });
 
+})
+
+app.get("/description/:id", function (req, res) {
+    id = validator.trim(validator.escape(req.param('id')));
+    if (!DescriptionModel) {
+        DescriptionModel = base.getDbModel('DescriptionModel');
+    }
+    base.find(constUtil.DescriptionModel(), {"gameId":id}, function (values) {
+        base.getCall(values[0].url, function(resp){
+            var json = resp
+            delete json.resource.transmissao
+            delete json.data_layer
+            delete json.context
+            delete json.hierarchy
+            delete json.resource.lances_feed
+            delete json.resource.total_espectadores
+            delete json.resource.tabela
+            res.json(json)
+        })
+    });
 })

@@ -1,6 +1,6 @@
 // var db_string = 'localhost:27017/data/db/TCC';
 
-var db_string = 'localhost:27017/data/db/TCC';
+var db_string = 'mongodb://heroku_8b0n86z8:7gapg0r76a4ccnoi18lk1uts2u@ds037698.mlab.com:37698/heroku_8b0n86z8';
 
 var mongoose = require('mongoose').connect(db_string);
 console.log("connected mongodb on localhost:27017")

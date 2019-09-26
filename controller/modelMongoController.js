@@ -10,3 +10,8 @@ var ScoreModel = base.createModel(constUtil.ScoreModel(), {
     date : Date
 });
 
+var DescriptionModel = base.createModel(constUtil.DescriptionModel(), {
+    gameId: String,
+    url : String,
+    date : Date
+});

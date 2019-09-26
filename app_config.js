@@ -13,7 +13,8 @@ var allowCors = function (req, res, next) {
     next();
 }
 
-app.listen(5000);
+var porta = process.env.PORT || 8080;
+app.listen(porta);
 console.log("running node server on localhost port:5000");
 
 app.use(allowCors);

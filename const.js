@@ -6,3 +6,6 @@ exports.ScoreModel = function () {
     return "ScoreModel";
 }
 
+exports.DescriptionModel = function () {
+    return "DescriptionModel";
+}
