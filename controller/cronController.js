@@ -20,7 +20,7 @@ function save(model) {
 }
 
 exports.createCrons = function() {
-    cron.schedule("0 * * * * *", function () {
+    cron.schedule("0 0 * * * *", function () {
         ScoreModel = base.getDbModel(constUtil.ScoreModel());
         console.log("Run Schedule "+new Date());
         var result = new Object()
@@ -48,7 +48,6 @@ exports.createCrons = function() {
                 }
 
                 if (count == 37) {
-                    console.log(JSON.stringify(result))
                     verify(result)
                     for(var i = 0; i<descriptions.values.length; i++) {
                         getDescription(descriptions.values[i].id, descriptions.values[i].url)
@@ -64,20 +63,7 @@ exports.createCrons = function() {
 
 function getDescription(id, url) {
     var url = "https://globoesporte.globo.com/globo/raw/"+url
-    console.log("getDescription "+url)
     verifyDescription(id, url)
-    // base.getCall("https://globoesporte.globo.com/globo/raw/https://globoesporte.globo.com/sp/futebol/brasileirao-serie-a/jogo/01-05-2019/corinthians-chapecoense.ghtml", function(resp){
-    //     console.log("getDescription request "+id)
-    //     var json = resp
-    //     delete json.resource.transmissao
-    //     delete json.data_layer
-    //     delete json.context
-    //     delete json.hierarchy
-    //     delete json.resource.lances_feed
-    //     delete json.resource.total_espectadores
-    //     delete json.resource.tabela
-    //     verifyDescription(id, json)
-    // })
 }
 
 
@@ -101,7 +87,6 @@ function verify(result) {
 }
 
 function verifyDescription(id, result) {
-    console.log("verifyDescription "+id)
     base.find(constUtil.DescriptionModel(), {"gameId": id}, function (valuesResult) {
         if (valuesResult && valuesResult.length > 0) {
             var values = valuesResult[0];
