@@ -14,52 +14,61 @@ function save(model) {
         if (err) {
             console.log(err);
         } else {
-            console.log('saved successfully: '+new Date());
+            // console.log('saved successfully: '+new Date());
         }
     });
 }
 
 exports.createCrons = function() {
-    cron.schedule("0 0 * * * *", function () {
+    cron.schedule("0 * * * * *", function () {
         ScoreModel = base.getDbModel(constUtil.ScoreModel());
         console.log("Run Schedule "+new Date());
         var result = new Object()
         result.rodadas = [38]
         var descriptions = new Object();
         descriptions.values = []
-        var count = 0
+        var count = 1
         var countTotal = 0
-        for (var i = 1; i <= 38; i++) {
-            base.getCall("https://api.globoesporte.globo.com/tabela/d1a37fa4-e948-43a6-ba53-ab24ab3a45b1/fase/fase-unica-seriea-2019/rodada/"+i+"/jogos/", function (resp) {
-                var rodada = new Object();
-                rodada.num = count + 1
-                rodada.value = resp
-                result.rodadas[count] = rodada
-
-                for (var i = 0; i<resp.length; i++) {
-                    if (resp[i].transmissao != null) {
-                        descriptions.values[countTotal] = new Object()
-                        descriptions.values[countTotal].url = resp[i].transmissao.url
-                        descriptions.values[countTotal].id = resp[i].id
-                        countTotal++
-                        // console.log("RUN "+resp[i].id)
-                        // getDescription(resp[i].id, resp[i].transmissao.url)
-                    }
-                }
-
-                if (count == 37) {
-                    verify(result)
-                    for(var i = 0; i<descriptions.values.length; i++) {
-                        getDescription(descriptions.values[i].id, descriptions.values[i].url)
-                    }
-                }
-                count++
-            })
-
-        }
+        getGame(count, countTotal, descriptions, result)
 
     });
 };
+
+function getGame(rodadaCount, countTotal, descriptions, result) {
+    if (rodadaCount > 38) {
+        return
+    }
+    var url = "https://api.globoesporte.globo.com/tabela/d1a37fa4-e948-43a6-ba53-ab24ab3a45b1/fase/fase-unica-seriea-2019/rodada/"+rodadaCount+"/jogos/"
+    base.getCall(url, function (resp) {
+        console.log(url)
+        console.log(rodadaCount)
+        var rodada = new Object();
+        rodada.num = rodadaCount
+        rodada.value = resp
+        result.rodadas[rodadaCount-1] = rodada
+
+        for (var i = 0; i<resp.length; i++) {
+            if (resp[i].transmissao != null) {
+                descriptions.values[countTotal] = new Object()
+                descriptions.values[countTotal].url = resp[i].transmissao.url
+                descriptions.values[countTotal].id = resp[i].id
+                countTotal++
+                // console.log("RUN "+resp[i].id)
+                // getDescription(resp[i].id, resp[i].transmissao.url)
+            }
+        }
+
+        if (rodadaCount == 37) {
+            verify(result)
+            for(var i = 0; i<descriptions.values.length; i++) {
+                getDescription(descriptions.values[i].id, descriptions.values[i].url)
+            }
+        }
+
+        rodadaCount++
+        getGame(rodadaCount, countTotal, descriptions, result)
+    })
+}
 
 function getDescription(id, url) {
     var url = "https://globoesporte.globo.com/globo/raw/"+url
