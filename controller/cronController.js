@@ -20,7 +20,7 @@ function save(model) {
 }
 
 exports.createCrons = function() {
-    cron.schedule("0 0 * * * *", function () {
+    cron.schedule("0 * * * * *", function () {
         ScoreModel = base.getDbModel(constUtil.ScoreModel());
         console.log("Run Schedule "+new Date());
         var result = new Object()
