@@ -53,6 +53,10 @@ exports.createMatch = function(params) {
     return {$match:params};
 };
 
+exports.drop = function(model, callback) {
+    model.drop()
+}
+
 // var query = dbSchemas.SomeValue.find({}).select({ "name": 1, "_id": 0});
 // exports.count = function (model, params, callback) {
 //     model.find()count(params,callback);

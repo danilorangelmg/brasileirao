@@ -105,3 +105,7 @@ function count(model, params, callback) {
     });
 }
 
+function drop(model, callback) {
+    db.drop(model, callback())
+}
+

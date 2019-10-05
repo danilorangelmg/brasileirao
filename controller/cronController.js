@@ -22,6 +22,7 @@ function save(model) {
 exports.createCrons = function() {
     cron.schedule("0 * * * * *", function () {
         ScoreModel = base.getDbModel(constUtil.ScoreModel());
+
         console.log("Run Schedule "+new Date());
         var result = new Object()
         result.rodadas = [38]
@@ -77,7 +78,7 @@ function getDescription(id, url) {
 
 
 function verify(result) {
-        base.find(constUtil.DescriptionModel(), {}, function (valuesResult) {
+        base.find(constUtil.ScoreModel(), {}, function (valuesResult) {
             if (valuesResult && valuesResult.length > 0) {
                 var values = valuesResult[0];
                 values.result = JSON.stringify(result);

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TCC-BACK.iml" filepath="$PROJECT_DIR$/TCC-BACK.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/brasileirao.iml" filepath="$PROJECT_DIR$/.idea/brasileirao.iml" />
     </modules>
   </component>
 </project>
