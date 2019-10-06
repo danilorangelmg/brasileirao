@@ -14,13 +14,13 @@ function save(model) {
         if (err) {
             console.log(err);
         } else {
-            // console.log('saved successfully: '+new Date());
+            console.log('saved successfully: '+new Date());
         }
     });
 }
 
 exports.createCrons = function() {
-    cron.schedule("0 * * * * *", function () {
+    cron.schedule("*/10 * * * *", function () {
         ScoreModel = base.getDbModel(constUtil.ScoreModel());
 
         console.log("Run Schedule "+new Date());
@@ -41,8 +41,8 @@ function getGame(rodadaCount, countTotal, descriptions, result) {
     }
     var url = "https://api.globoesporte.globo.com/tabela/d1a37fa4-e948-43a6-ba53-ab24ab3a45b1/fase/fase-unica-seriea-2019/rodada/"+rodadaCount+"/jogos/"
     base.getCall(url, function (resp) {
-        console.log(url)
-        console.log(rodadaCount)
+        // console.log(url)
+        // console.log(rodadaCount)
         var rodada = new Object();
         rodada.num = rodadaCount
         rodada.value = resp
