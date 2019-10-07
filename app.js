@@ -3,6 +3,7 @@ var app = require('./app_config.js');
 //controller
 require('./controller/modelMongoController.js');
 var cron = require('./controller/cronController.js');
+var game = require('./controller/gameController.js');
 var base = require('./controller/baseController.js');
 var cheerio = require('cheerio')
 var request = require("request");
@@ -61,17 +62,7 @@ app.get("/description/:id", function (req, res) {
     if (!DescriptionModel) {
         DescriptionModel = base.getDbModel('DescriptionModel');
     }
-    base.find(constUtil.DescriptionModel(), {"gameId":id}, function (values) {
-        base.getCall(values[0].url, function(resp){
-            var json = resp
-            delete json.resource.transmissao
-            delete json.data_layer
-            delete json.context
-            delete json.hierarchy
-            delete json.resource.lances_feed
-            delete json.resource.total_espectadores
-            delete json.resource.tabela
-            res.json(json)
-        })
-    });
+
+    game.getGames(req, res, id)
+
 })

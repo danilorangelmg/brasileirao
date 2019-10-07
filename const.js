@@ -9,3 +9,7 @@ exports.ScoreModel = function () {
 exports.DescriptionModel = function () {
     return "DescriptionModel";
 }
+
+exports.DescriptionModelCache = function () {
+    return "DescriptionModelCache";
+}

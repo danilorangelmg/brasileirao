@@ -41,8 +41,6 @@ function getGame(rodadaCount, countTotal, descriptions, result) {
     }
     var url = "https://api.globoesporte.globo.com/tabela/d1a37fa4-e948-43a6-ba53-ab24ab3a45b1/fase/fase-unica-seriea-2019/rodada/"+rodadaCount+"/jogos/"
     base.getCall(url, function (resp) {
-        // console.log(url)
-        // console.log(rodadaCount)
         var rodada = new Object();
         rodada.num = rodadaCount
         rodada.value = resp
@@ -54,8 +52,6 @@ function getGame(rodadaCount, countTotal, descriptions, result) {
                 descriptions.values[countTotal].url = resp[i].transmissao.url
                 descriptions.values[countTotal].id = resp[i].id
                 countTotal++
-                // console.log("RUN "+resp[i].id)
-                // getDescription(resp[i].id, resp[i].transmissao.url)
             }
         }
 

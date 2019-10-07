@@ -15,3 +15,9 @@ var DescriptionModel = base.createModel(constUtil.DescriptionModel(), {
     url : String,
     date : Date
 });
+
+var DescriptionModelCache = base.createModel(constUtil.DescriptionModelCache(), {
+    gameId: String,
+    result : String,
+    date : Date
+});
